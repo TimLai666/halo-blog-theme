@@ -9,9 +9,11 @@
 
       <nav class="nb__nav" aria-label="主選單">
         <a class="nb__link" th:href="${site.url}" href="/">首頁</a>
-        <a class="nb__link" th:href="${site.routes.archivesUri}" href="/archives">所有文章</a>
-        <a class="nb__link" th:href="${site.routes.categoriesUri}" href="/categories">分類</a>
-        <a class="nb__link" th:href="${site.routes.tagsUri}" href="/tags">標籤</a>
+        <a class="nb__link" th:href="${site.routes != null ? site.routes.archivesUri : '/archives'}"
+          href="/archives">所有文章</a>
+        <a class="nb__link" th:href="${site.routes != null ? site.routes.categoriesUri : '/categories'}"
+          href="/categories">分類</a>
+        <a class="nb__link" th:href="${site.routes != null ? site.routes.tagsUri : '/tags'}" href="/tags">標籤</a>
       </nav>
 
       <form class="nb__search" th:if="${theme.config.layout.show_search}">

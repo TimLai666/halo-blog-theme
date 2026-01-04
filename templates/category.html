@@ -1,14 +1,14 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
   <th:insert th:replace="~{modules/head :: headFragment}"></th:insert>
-
-  <body class="theme theme--tax" th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
+  <body class="theme theme--tax"
+        th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
                         (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')"
-    th:attr="data-accent=${theme.config.style.accent}">
+        th:attr="data-accent=${theme.config.style.accent}">
     <th:insert th:replace="~{modules/header :: headerFragment}"></th:insert>
     <main class="tax">
-      <h1 class="tax__title" th:text="${category != null ? category.spec.displayName : '分類'}">Category</h1>
+      <h1 class="tax__title" th:text="${category.spec.displayName}">Category</h1>
 
-      <section class="home__grid" th:if="${posts != null && posts.items != null}">
+      <section class="home__grid">
         <article class="card" th:each="p, st : ${posts.items}">
           <a class="card__link" th:href="${p.status.permalink}">
             <div class="card__cap">
@@ -20,8 +20,9 @@
               <p class="card__excerpt" th:text="${p.status.excerpt}">Excerpt</p>
             </header>
             <footer class="card__ft">
-              <time class="card__time" th:text="${#temporals.format(p.spec.publishTime, 'yyyy-MM-dd')}"
-                th:if="${p.spec.publishTime}">2026-01-01</time>
+              <time class="card__time"
+                    th:text="${#temporals.format(p.spec.publishTime, 'yyyy-MM-dd')}"
+                    th:if="${p.spec.publishTime}">2026-01-01</time>
             </footer>
           </a>
         </article>
