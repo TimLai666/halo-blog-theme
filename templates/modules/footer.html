@@ -1,0 +1,20 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="footerFragment">
+<footer class="ft">
+  <div class="ft__inner">
+    <div class="ft__left">
+      <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2026</span>
+      <span>©</span>
+      <span th:text="${site.title}">Site</span>
+      <span class="ft__sep">/</span>
+      <a th:href="${site.url + '/rss'}" href="/rss">RSS</a>
+      <span class="ft__sep">/</span>
+      <a th:href="${site.url + '/sitemap.xml'}" href="/sitemap.xml">Sitemap</a>
+    </div>
+    <div class="ft__right">
+      <span>Powered by Halo · Theme NEURAL</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
+</th:block>

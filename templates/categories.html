@@ -1,0 +1,22 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
+  <th:insert th:replace="~{modules/head :: headFragment}"></th:insert>
+
+  <body class="theme theme--tax" th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
+                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')"
+    th:attr="data-accent=${theme.config.style.accent}">
+    <th:insert th:replace="~{modules/header :: headerFragment}"></th:insert>
+    <main class="tax">
+      <h1 class="tax__title">分類</h1>
+      <div class="tax__grid" th:if="${categories != null && categories.items != null}">
+        <a class="tax__chip" th:each="c : ${categories.items}" th:href="${c.status.permalink}">
+          <span class="tax__chipName" th:text="${c.spec.displayName}">cat</span>
+          <span class="tax__chipCount" th:text="${c.postCount}">0</span>
+        </a>
+      </div>
+      <div class="pager" th:if="${categories.hasPrevious() || categories.hasNext()}">
+        <a class="pager__btn" th:if="${categories.hasPrevious()}" th:href="@{${categories.prevUrl}}">← 上一頁</a>
+        <span class="pager__info" th:text="${categories.page} +' / '+ ${categories.totalPages}">1 / 1</span>
+        <a class="pager__btn" th:if="${categories.hasNext()}" th:href="@{${categories.nextUrl}}">下一頁 →</a>
+      </div>
+    </main>
+    <th:insert th:replace="~{modules/footer :: footerFragment}"></th:insert>

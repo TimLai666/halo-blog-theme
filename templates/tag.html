@@ -1,0 +1,38 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
+  <th:insert th:replace="~{modules/head :: headFragment}"></th:insert>
+
+  <body class="theme theme--tax" th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
+                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')"
+    th:attr="data-accent=${theme.config.style.accent}">
+    <th:insert th:replace="~{modules/header :: headerFragment}"></th:insert>
+    <main class="tax">
+      <h1 class="tax__title">
+        <span class="tax__hash">#</span><span th:text="${tag != null ? tag.spec.displayName : 'Tag'}">Tag</span>
+      </h1>
+
+      <section class="home__grid" th:if="${posts != null && posts.items != null}">
+        <article class="card" th:each="p, st : ${posts.items}">
+          <a class="card__link" th:href="${p.status.permalink}">
+            <div class="card__cap">
+              <div class="card__no" th:text="${#numbers.formatInteger(st.index + 1, 2)}">01</div>
+              <div class="card__capLine"></div>
+            </div>
+            <header class="card__hd">
+              <h2 class="card__title" th:text="${p.spec.title}">Title</h2>
+              <p class="card__excerpt" th:text="${p.status.excerpt}">Excerpt</p>
+            </header>
+            <footer class="card__ft">
+              <time class="card__time" th:text="${#temporals.format(p.spec.publishTime, 'yyyy-MM-dd')}"
+                th:if="${p.spec.publishTime}">2026-01-01</time>
+            </footer>
+          </a>
+        </article>
+
+        <div class="pager" th:if="${posts.hasPrevious() || posts.hasNext()}">
+          <a class="pager__btn" th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">← 上一頁</a>
+          <span class="pager__info" th:text="${posts.page} +' / '+ ${posts.totalPages}">1 / 1</span>
+          <a class="pager__btn" th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">下一頁 →</a>
+        </div>
+      </section>
+    </main>
+    <th:insert th:replace="~{modules/footer :: footerFragment}"></th:insert>

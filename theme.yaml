@@ -1,0 +1,27 @@
+apiVersion: theme.halo.run/v1alpha1
+kind: Theme
+metadata:
+  name: neural
+spec:
+  displayName: "NEURAL"
+  author:
+    name: "TimLai666"
+    website: "https://zhenblog.hazelnut-paradise.com"
+  description: "無封面也成立的未來感閱讀主題：首頁是索引，文章頁是沉浸閱讀模式。"
+  logo: ""
+  homepage: "https://zhenblog.hazelnut-paradise.com"
+  repo: ""
+  issues: ""
+  settingName: "neural-setting"
+  configMapName: "neural-config"
+  version: "1.0.0"
+  requires: ">=2.0.0"
+  license:
+    - name: "MIT"
+      url: ""
+  customTemplates:
+    post:
+      - name: "沉浸閱讀（亮底）"
+        description: "進入文章後切換到閱讀模式：亮底、無干擾、排版主導。"
+        screenshot: ""
+        file: "post_read"

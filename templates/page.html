@@ -1,0 +1,31 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
+  <th:insert th:replace="~{modules/head :: headFragment}"></th:insert>
+  <body class="theme theme--page theme--read"
+        th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
+                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')"
+        th:attr="data-accent=${theme.config.style.accent},
+                 data-serif=${theme.config.style.serif_body},
+                 data-reduce-motion=${theme.config.style.reduce_motion}">
+
+    <header class="rh rh--page">
+      <a class="rh__back" th:href="${site.url}" href="/">←</a>
+      <a class="rh__brand" th:href="${site.url}" href="/">
+        <span class="rh__dot" aria-hidden="true"></span>
+        <span th:text="${site.title}">Site</span>
+      </a>
+      <a class="rh__toTop" href="#top" title="回到頂部">↑</a>
+    </header>
+
+    <main id="top" class="post post--page">
+      <section class="post__hero post__hero--page">
+        <div class="post__heroInner">
+          <h1 class="post__title" th:text="${page.spec.title}">Page</h1>
+        </div>
+      </section>
+
+      <article class="post__content" th:classappend="${theme.config.style.serif_body} ? ' prose--serif' : ''">
+        <div class="prose" th:utext="${page.content.content}"></div>
+      </article>
+    </main>
+
+    <th:insert th:replace="~{modules/footer :: footerFragment}"></th:insert>

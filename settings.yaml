@@ -1,0 +1,52 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: neural-setting
+spec:
+  forms:
+    - group: style
+      label: 風格
+      formSchema:
+        - $formkit: radio
+          name: color_scheme
+          label: 預設配色
+          value: system
+          options:
+            - label: 跟隨系統
+              value: system
+            - label: 深色
+              value: dark
+            - label: 淺色
+              value: light
+        - $formkit: color
+          name: accent
+          label: 強調色
+          value: "#58A6FF"
+        - $formkit: switch
+          name: serif_body
+          label: 內文使用襯線（更像閱讀器）
+          value: true
+        - $formkit: switch
+          name: reduce_motion
+          label: 減少動畫（偏極簡）
+          value: false
+    - group: layout
+      label: 版面
+      formSchema:
+        - $formkit: radio
+          name: home_density
+          label: 首頁密度
+          value: comfortable
+          options:
+            - label: 舒服
+              value: comfortable
+            - label: 緊湊
+              value: compact
+        - $formkit: switch
+          name: show_search
+          label: 顯示搜尋框
+          value: true
+        - $formkit: switch
+          name: show_reading_progress
+          label: 顯示閱讀進度條
+          value: true
