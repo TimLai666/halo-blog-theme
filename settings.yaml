@@ -4,80 +4,303 @@ metadata:
   name: neural-setting
 spec:
   forms:
-    - group: style
-      label: 風格
+    - group: base
+      label: 基礎設定
       formSchema:
-        - $formkit: radio
+        - $formkit: group
+          name: themeColor
+          label: 主題顏色
+          value:
+            hue: 250
+            fixed: false
+          children:
+            - $formkit: number
+              name: hue
+              min: 0
+              max: 360
+              step: 5
+              label: 色調(Halo表單好像目前不支持 colorpicker)
+              value: 250
+              help: "主題顏色的默認色調，從0到360。紅色：0，藍綠色：200，青色：250，粉紅色：345"
+            - $formkit: checkbox
+              name: fixed
+              label: 固定色調
+              value: false
+              help: "隱藏訪客的主題彩色選擇器"
+        - $formkit: group
+          name: banner
+          label: Banner
+          value:
+            enable: true
+            src: "/themes/neural/assets/images/demo-banner.png"
+            position: "center"
+            credit:
+              enable: false
+              text: "© 2022 Neural"
+              url: ""
+          children:
+            - $formkit: checkbox
+              name: enable
+              label: 啟用
+              value: true
+              help: "啟用橫幅"
+            - $formkit: attachment
+              name: src
+              label: 圖片
+              value: "/themes/neural/assets/images/demo-banner.png"
+              help: "顯示的圖像"
+            - $formkit: select
+              name: position
+              label: 位置
+              value: "center"
+              options:
+                - value: center
+                  label: 居中
+                - value: top
+                  label: 頂部
+                - value: bottom
+                  label: 底部
+            - $formkit: group
+              name: credit
+              label: 版權信息
+              children:
+                - $formkit: checkbox
+                  name: enable
+                  label: 啟用
+                  value: false
+                  help: "啟用版權信息"
+                - $formkit: text
+                  name: text
+                  label: 文字
+                  value: "© 2026 Neural"
+                  help: "顯示的文字"
+                - $formkit: url
+                  name: url
+                  label: 連結
+                  value:
+        - $formkit: group
+          name: toc
+          label: 目錄
+          value:
+            enable: false
+            max_depth: 2
+          children:
+            - $formkit: checkbox
+              name: enable
+              label: 啟用
+              value: false
+              help: "啟用目錄"
+            - $formkit: number
+              name: max_depth
+              label: 最大深度
+              value: 2
+              help: "目錄的最大深度"
+        - $formkit: menuRadio
+          id: menu
+          name: menu
+          label: 菜單
+          value: ""
+          help: "选择菜单(仅支持一级菜单)"
+    - group: style
+      label: 样式
+      formSchema:
+        - $formkit: select
           name: color_scheme
-          label: 預設配色
-          value: system
+          label: 默认配色
+          value: auto
           options:
             - label: 跟隨系統
-              value: system
+              value: auto
             - label: 深色
               value: dark
             - label: 淺色
               value: light
-        - $formkit: color
-          name: accent
-          label: 強調色
-          value: "#58A6FF"
-        - $formkit: switch
-          name: serif_body
-          label: 內文使用襯線（更像閱讀器）
-          value: true
-        - $formkit: switch
-          name: reduce_motion
-          label: 減少動畫（偏極簡）
-          value: false
-    - group: layout
-      label: 版面
-      formSchema:
-        - $formkit: radio
-          name: home_density
-          label: 首頁密度
-          value: comfortable
-          options:
-            - label: 舒服
-              value: comfortable
-            - label: 緊湊
-              value: compact
-        - $formkit: switch
-          name: show_search
-          label: 顯示搜尋框
-          value: true
-        - $formkit: switch
-          name: show_reading_progress
-          label: 顯示閱讀進度條
-          value: true
 
+        - $formkit: checkbox
+          name: enable_change_color_scheme
+          label: 允許訪客切換配色
+          value: true
     - group: sidebar
-      label: 側欄
+      label: 側邊欄
       formSchema:
+        - $formkit: repeater
+          name: widgets
+          label: 小部件
+          value:
+            - value: profile
+            - value: categories
+            - value: tags
+          children:
+            - $formkit: select
+              name: value
+              label: 部件
+              options:
+                - label: 个人卡片
+                  value: profile
+                - label: 熱門文章（TODO）
+                  value: popular-posts
+                - label: 文章分類
+                  value: categories
+                - label: 文章標籤
+                  value: tags
+
+    - group: profile
+      label: 個人設置
+      formSchema:
+        - $formkit: attachment
+          name: avatar
+          value: /themes/neural/assets/images/demo-avatar.png
+          label: 頭像
         - $formkit: text
-          name: display_name
-          label: 側欄顯示名稱
-          value: ""
-          help: 留空則使用網站標題
-        - $formkit: textarea
+          name: name
+          label: 昵稱
+          value: Fuwari
+        - $formkit: text
           name: bio
-          label: 側欄簡介
-          value: ""
-          help: 留空則使用網站副標
-        - $formkit: text
-          name: avatar_url
-          label: 側欄頭像網址
-          value: ""
-          help: 留空則使用網站 Logo
-        - $formkit: text
-          name: github_url
-          label: GitHub 連結
-          value: ""
-        - $formkit: switch
-          name: show_categories
-          label: 顯示分類
-          value: true
-        - $formkit: switch
-          name: show_tags
-          label: 顯示標籤
-          value: true
+          label: 简介
+          value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        - $formkit: url
+          name: url
+          label: 链接
+          value: /about
+
+        - $formkit: repeater
+          name: social_media
+          label: 社交媒体
+          value:
+            - icon: icon-[mdi--github]
+              url: https://github.com/jiewenhuang
+              text: GitHub
+              url_type: normal
+
+          children:
+            - $formkit: select
+              name: icon
+              label: 图标
+              options:
+                - label: 电子邮箱
+                  value: icon-[tabler--mail-filled]
+                - label: 微信
+                  value: icon-[streamline-logos--wechat-logo-block]
+                - label: 腾讯 QQ
+                  value: icon-[fa6-brands--qq]
+                - label: 新浪微博
+                  value: icon-[simple-icons--sinaweibo]
+                - label: 知乎
+                  value: icon-[ant-design--zhihu-circle-filled]
+                - label: 豆瓣
+                  value: icon-[streamline-logos--douban-logo-block]
+                - label: 哔哩哔哩
+                  value: icon-[streamline-logos--bilibili-logo-block]
+                - label: 抖音 / TikTok
+                  value: icon-[streamline-logos--tiktok-logo-block]
+                - label: Telegram
+                  value: icon-[ic--baseline-telegram]
+                - label: Facebook
+                  value: icon-[ic--baseline-facebook]
+                - label: Instagram
+                  value: icon-[ant-design--instagram-filled]
+                - label: LinkedIn
+                  value: icon-[entypo-social--linkedin-with-circle]
+                - label: Twitter
+                  value: icon-[streamline-logos--x-twitter-logo-block]
+                - label: Slack
+                  value: icon-[ant-design--slack-circle-filled]
+                - label: Discord
+                  value: icon-[ic--baseline-discord]
+                - label: YouTube
+                  value: icon-[entypo-social--youtube-with-circle]
+                - label: Steam
+                  value: icon-[ri--steam-fill]
+                - label: GitHub
+                  value: icon-[mdi--github]
+                - label: GitLab
+                  value: icon-[fa6-brands--square-gitlab]
+                - label: RSS
+                  value: icon-[streamline-plump--rss-square-solid]
+            - $formkit: text
+              name: name
+              label: 名称
+            - $formkit: text
+              name: url
+              label: 链接
+              validation: "required"
+            - $formkit: select
+              name: url_type
+              label: 链接类型
+              value: normal
+              help: "如果选择了图片类型，那么在访客点击之后会使用弹框的形式加载"
+              options:
+                - label: 跳转链接
+                  value: normal
+                - label: 图片
+                  value: image
+
+    - group: post
+      label: 文章
+      formSchema:
+        - $formkit: group
+          name: license
+          label: 版权声明
+          value:
+            enable: false
+            name: CC BY-NC-SA 4.0
+            url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+          children:
+            - $formkit: checkbox
+              name: enable
+              label: 启用
+              value: false
+              help: "启用版权声明"
+            - $formkit: text
+              name: name
+              label: 名称
+              value: CC BY-NC-SA 4.0
+            - $formkit: url
+              name: url
+              label: 链接
+              value: https://creativecommons.org/licenses/by-nc-sa/4.0/
+        - $formkit: select
+          name: content_size
+          label: 字体大小
+          value: prose-base
+          options:
+            - value: prose-base
+              label: prose-base
+            - value: prose-sm
+              label: prose-sm
+            - value: prose-lg
+              label: prose-lg
+            - value: prose-xl
+              label: prose-xl
+            - value: prose-2xl
+              label: prose-2xl
+        - $formkit: select
+          name: content_theme
+          label: 颜色主题
+          value: prose-gray
+          options:
+            - value: prose-gray
+              label: prose-gray
+            - value: prose-slate
+              label: prose-slate
+            - value: prose-zinc
+              label: prose-zinc
+            - value: prose-neutral
+              label: prose-neutral
+            - value: prose-stone
+              label: prose-stone
+        - $formkit: checkbox
+          name: enable_toc
+          label: 启用目录
+          value: false
+          help: "启用目录"
+
+    - group: development
+      label: 开发设置
+      formSchema:
+        - $formkit: checkbox
+          name: enabled
+          label: 启用开发模式
+          value: false
+          help: 仅供开发环境使用，开启此设置后，所有静态资源由 Vite 开发服务器提供，所以需要在本地启动 Vite 服务（pnpm dev）

@@ -1,37 +1,67 @@
-<th:block xmlns:th="http://www.thymeleaf.org">
-  <th:insert th:replace="~{modules/head :: headFragment}"></th:insert>
-  <body class="theme theme--tax"
-        th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
-                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')"
-        th:attr="data-accent=${theme.config.style.accent}">
-    <th:insert th:replace="~{modules/header :: headerFragment}"></th:insert>
-    <main class="tax">
-      <h1 class="tax__title" th:text="${category.spec.displayName}">Category</h1>
-
-      <section class="home__grid">
-        <article class="card" th:each="p, st : ${posts.items}">
-          <a class="card__link" th:href="${p.status.permalink}">
-            <div class="card__cap">
-              <div class="card__no" th:text="${#numbers.formatInteger(st.index + 1, 2)}">01</div>
-              <div class="card__capLine"></div>
-            </div>
-            <header class="card__hd">
-              <h2 class="card__title" th:text="${p.spec.title}">Title</h2>
-              <p class="card__excerpt" th:text="${p.status.excerpt}">Excerpt</p>
-            </header>
-            <footer class="card__ft">
-              <time class="card__time"
-                    th:text="${#temporals.format(p.spec.publishTime, 'yyyy-MM-dd')}"
-                    th:if="${p.spec.publishTime}">2026-01-01</time>
-            </footer>
-          </a>
-        </article>
-
-        <div class="pager" th:if="${posts.hasPrevious() || posts.hasNext()}">
-          <a class="pager__btn" th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">← 上一頁</a>
-          <span class="pager__info" th:text="${posts.page} +' / '+ ${posts.totalPages}">1 / 1</span>
-          <a class="pager__btn" th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">下一頁 →</a>
+<!doctype html>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  th:replace="~{modules/layout :: html(title = |#{page.category.title(${category.spec.displayName})} - ${site.title}|, hero = null, content = ~{::content}, head = null, footer = null, sidebar = null, contentClass = null, pageType = 'archives')}"
+>
+  <th:block th:fragment="content">
+    <div class="card-base mb-5 px-8 py-6">
+      <div class="my-2 px-2 text-2xl font-bold text-[var(--primary)]" th:text="${category.spec.displayName}"></div>
+      <div>
+        <div class="flex h-[3.75rem] w-full flex-row items-center">
+          <div class="text-75 w-[15%] text-right text-lg font-bold transition md:w-[10%]">时间轴</div>
+          <div class="w-[15%] md:w-[10%]">
+            <div
+              class="outline-3 z-50 mx-auto h-3 w-3 rounded-full bg-none outline -outline-offset-[2px] outline-[var(--primary)]"
+            ></div>
+          </div>
+          <div
+            class="text-50 w-[70%] text-left transition md:w-[80%]"
+            th:text="#{page.archives.postCount(${category.postCount})}"
+          ></div>
         </div>
-      </section>
-    </main>
-    <th:insert th:replace="~{modules/footer :: footerFragment}"></th:insert>
+
+        <th:block th:each="post : ${posts.items}">
+          <a
+            th:href="${post.status.permalink}"
+            th:aria-label="${post.spec.title}"
+            class="btn-plain group !block h-10 w-full rounded-lg hover:text-[initial]"
+          >
+            <div class="flex h-full flex-row items-center justify-start">
+              <!-- date -->
+              <div
+                class="text-50 w-[15%] text-right text-sm transition md:w-[10%]"
+                th:text="${#dates.format(post.spec.publishTime,'MM-dd')}"
+              >
+                >
+              </div>
+
+              <!-- dot and line -->
+              <div class="dash-line relative flex h-full w-[15%] items-center md:w-[10%]">
+                <div
+                  class="z-50 mx-auto h-1 w-1 rounded bg-[oklch(0.5_0.05_var(--hue))] outline outline-4 outline-[var(--card-bg)] transition-all group-hover:h-5 group-hover:bg-[var(--primary)] group-hover:outline-[var(--btn-plain-bg-hover)] group-active:outline-[var(--btn-plain-bg-active)]"
+                ></div>
+              </div>
+
+              <!-- post title -->
+              <div
+                class="text-75 w-[70%] overflow-hidden overflow-ellipsis whitespace-nowrap pr-8 text-left font-bold transition-all group-hover:translate-x-1 group-hover:text-[var(--primary)] md:w-[65%] md:max-w-[65%]"
+              >
+                [[${post.spec.title}]]
+              </div>
+
+              <!-- tag list -->
+              <div
+                class="text-30 hidden overflow-hidden overflow-ellipsis whitespace-nowrap text-left text-sm transition md:block md:w-[15%]"
+              >
+                <th:block th:each="tag : ${post.tags}"> [[${'#'+tag.spec.displayName}]] </th:block>
+              </div>
+            </div>
+          </a>
+        </th:block>
+      </div>
+    </div>
+    <th:block
+      th:replace="~{modules/pagination :: pagination(context = ${category.status.permalink+'/page/'}, prevUrl = ${posts.prevUrl}, nextUrl = ${posts.nextUrl}, totalPages = ${posts.totalPages}, page = ${posts.page}, hasPrevious = ${posts.hasPrevious()}, hasNext = ${posts.hasNext()}, postListCount = ${posts.items.size()})}"
+    />
+  </th:block>
+</html>

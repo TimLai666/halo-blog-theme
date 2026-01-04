@@ -1,69 +1,166 @@
-<th:block xmlns:th="http://www.thymeleaf.org">
-  <th:insert th:replace="~{modules/head :: headFragment}"></th:insert>
-  <body class="theme theme--home"
-        th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
-                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')"
-        th:attr="data-accent=${theme.config.style.accent},
-                 data-density=${theme.config.layout.home_density},
-                 data-reduce-motion=${theme.config.style.reduce_motion}">
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/layout :: html(
+    title = ${site.title},
+    hero = null,
+    content = ~{::content},
+    head = null,
+    footer = null,
+    sidebar = null,
+    contentClass = null,
+    pageType = 'home'
+  )}">
+<th:block th:fragment="content">
+  <!-- NEURAL HERO -->
+  <section style="margin:0 0 12px 0 !important; padding:8px 0 6px 0 !important;">
+    <div style="
+          background: var(--card-bg) !important;
+          border-radius: var(--radius-large) !important;
+          padding: 16px 16px !important;
+        ">
+      <h1 th:text="${site.title}" style="
+            margin: 0 !important;
+            font-size: 1.6rem !important;
+            font-weight: 800 !important;
+            letter-spacing: .4px !important;
+            line-height: 1.2 !important;
+          ">
+        Site
+      </h1>
 
-    <th:insert th:replace="~{modules/header :: headerFragment}"></th:insert>
+      <p th:if="${site.subtitle}" th:text="${site.subtitle}" style="
+            margin: 6px 0 0 0 !important;
+            opacity: .72 !important;
+            line-height: 1.6 !important;
+          ">
+        subtitle
+      </p>
+    </div>
+  </section>
 
-    <main class="home">
-      <section class="home__hero">
-        <div class="home__heroInner">
-          <h1 class="home__h1" th:text="${site.title}">Site</h1>
-          <p class="home__lead" th:if="${site.subtitle}" th:text="${site.subtitle}">subtitle</p>
-          <p class="home__meta">
-            <span class="pill">無封面也成立</span>
-            <span class="pill">文字為主</span>
-            <span class="pill">沉浸閱讀</span>
-          </p>
-        </div>
-      </section>
-
-      <section class="home__layout">
-        <section class="home__grid" aria-label="文章列表">
-          <article class="card" th:each="p, st : ${posts.items}">
-            <a class="card__link" th:href="${p.status.permalink}">
-              <div class="card__cap">
-                <div class="card__no" th:text="${#numbers.formatInteger(st.index + 1, 2)}">01</div>
-                <div class="card__capLine"></div>
-              </div>
-
-              <header class="card__hd">
-                <h2 class="card__title" th:text="${p.spec.title}">Title</h2>
-                <p class="card__excerpt" th:text="${p.status.excerpt}">Excerpt</p>
-              </header>
-
-              <footer class="card__ft">
-                <time class="card__time"
-                      th:text="${#temporals.format(p.spec.publishTime, 'yyyy-MM-dd')}"
-                      th:if="${p.spec.publishTime}">2026-01-01</time>
-
-                <div class="card__tags" th:if="${p.tags}">
-                  <span class="tag" th:each="t : ${p.tags}" th:text="${t.spec.displayName}">tag</span>
-                </div>
-              </footer>
-            </a>
-
-            <!-- Optional cover: only show if exists, but never required -->
-            <div class="card__cover" th:if="${p.spec.cover}">
-              <img th:src="${p.spec.cover}" alt="" loading="lazy"/>
-            </div>
-          </article>
-
-          <div class="pager" th:if="${posts.hasPrevious() || posts.hasNext()}">
-            <a class="pager__btn" th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">← 上一頁</a>
-            <span class="pager__info" th:text="${posts.page} +' / '+ ${posts.totalPages}">1 / 1</span>
-            <a class="pager__btn" th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">下一頁 →</a>
+  <!-- NEURAL LIST -->
+  <section style="display:grid !important; gap:10px !important;">
+    <article th:each="post, st : ${posts.items}" style="
+          position: relative !important;
+          overflow: hidden !important;
+          border-radius: var(--radius-large) !important;
+          background: var(--card-bg) !important;
+          transform: translateY(0) !important;
+          transition: transform .15s ease !important;
+        " onmouseenter="this.style.transform='translateY(-1px)'" onmouseleave="this.style.transform='translateY(0)'">
+      <a th:href="${post.status.permalink}" style="
+            display: block !important;
+            position: relative !important;
+            padding: 14px 14px !important;
+            text-decoration: none !important;
+          ">
+        <!-- cap -->
+        <div style="
+              display:flex !important;
+              align-items:center !important;
+              gap:10px !important;
+              margin: 0 0 10px 0 !important;
+              opacity: .92 !important;
+            ">
+          <div th:text="${#numbers.formatInteger(st.index + 1, 2)}" style="
+                min-width: 2.6em !important;
+                font-weight: 800 !important;
+                letter-spacing: 1.2px !important;
+                font-variant-numeric: tabular-nums !important;
+              ">
+            01
           </div>
-        </section>
 
-        <aside class="home__side" aria-label="側欄">
-          <th:insert th:replace="~{modules/sidebar :: sidebarFragment}"></th:insert>
-        </aside>
-      </section>
-    </main>
+          <div style="
+                height: 1px !important;
+                flex: 1 !important;
+                background: rgba(255,255,255,.14) !important;
+              "></div>
 
-    <th:insert th:replace="~{modules/footer :: footerFragment}"></th:insert>
+          <time th:if="${post.spec.publishTime}" th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}"
+            style="
+                font-size: .9rem !important;
+                opacity: .68 !important;
+                font-variant-numeric: tabular-nums !important;
+                white-space: nowrap !important;
+              ">
+            2026-01-01
+          </time>
+        </div>
+
+        <!-- title -->
+        <h2 th:text="${post.spec.title}" style="
+              margin: 0 !important;
+              font-size: 1.15rem !important;
+              line-height: 1.35 !important;
+              letter-spacing: .2px !important;
+              font-weight: 800 !important;
+            ">
+          Title
+        </h2>
+
+        <!-- excerpt (optional) -->
+        <p th:if="${post.status.excerpt}" th:text="${post.status.excerpt}" style="
+              margin: 8px 0 0 0 !important;
+              opacity: .74 !important;
+              line-height: 1.7 !important;
+            ">
+          excerpt
+        </p>
+
+        <!-- tags (optional, max 3) -->
+        <div th:if="${post.tags}" style="
+              margin-top: 10px !important;
+              display: flex !important;
+              gap: 8px !important;
+              flex-wrap: wrap !important;
+            ">
+          <span th:each="t, ts : ${post.tags}" th:if="${ts.index < 3}" th:text="${t.spec.displayName}" style="
+                display:inline-block !important;
+                font-size: .82rem !important;
+                padding: 4px 10px !important;
+                border-radius: 999px !important;
+                border: 1px solid rgba(255,255,255,.14) !important;
+                background: rgba(255,255,255,.04) !important;
+                opacity: .92 !important;
+              ">
+            tag
+          </span>
+        </div>
+
+        <!-- ambient cover (optional) -->
+        <div th:if="${post.spec.cover}" style="
+              position: absolute !important;
+              top: 0 !important;
+              right: 0 !important;
+              bottom: 0 !important;
+              width: 220px !important;
+              opacity: .14 !important;
+              pointer-events: none !important;
+              -webkit-mask-image: linear-gradient(270deg, rgba(0,0,0,1), rgba(0,0,0,0)) !important;
+              mask-image: linear-gradient(270deg, rgba(0,0,0,1), rgba(0,0,0,0)) !important;
+            ">
+          <img th:src="${post.spec.cover}" alt="" loading="lazy" style="
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+                filter: saturate(1.05) contrast(1.05) !important;
+              " />
+        </div>
+      </a>
+    </article>
+  </section>
+
+  <!-- pagination: keep Fuwari -->
+  <th:block th:replace="~{modules/pagination :: pagination(
+        context = '/page/',
+        prevUrl = ${posts.prevUrl},
+        nextUrl = ${posts.nextUrl},
+        totalPages = ${posts.totalPages},
+        page = ${posts.page},
+        hasPrevious = ${posts.hasPrevious()},
+        hasNext = ${posts.hasNext()},
+        postListCount = ${posts.items.size()}
+      )}" />
+</th:block>
+
+</html>

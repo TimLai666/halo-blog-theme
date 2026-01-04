@@ -1,0 +1,20 @@
+{
+  "../node_modules/.pnpm/photoswipe@5.4.4/node_modules/photoswipe/dist/photoswipe.esm.js": {
+    "file": "photoswipe.esm.js",
+    "name": "photoswipe.esm",
+    "src": "../node_modules/.pnpm/photoswipe@5.4.4/node_modules/photoswipe/dist/photoswipe.esm.js",
+    "isDynamicEntry": true
+  },
+  "main.ts": {
+    "file": "main.js",
+    "name": "main",
+    "src": "main.ts",
+    "isEntry": true,
+    "dynamicImports": [
+      "../node_modules/.pnpm/photoswipe@5.4.4/node_modules/photoswipe/dist/photoswipe.esm.js"
+    ],
+    "css": [
+      "main.css"
+    ]
+  }
+}
