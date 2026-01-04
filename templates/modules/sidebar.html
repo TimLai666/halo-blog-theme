@@ -1,0 +1,65 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="sidebarFragment" th:with="sb=${theme.config.sidebar}">
+
+  <section class="sideCard sideCard--profile">
+    <div class="sideProfile">
+      <div class="sideProfile__avatar"
+           th:if="${(sb != null and sb.avatar_url != null and sb.avatar_url != '') or (site.logo != null and site.logo != '')}">
+        <img
+          th:src="${(sb != null and sb.avatar_url != null and sb.avatar_url != '') ? sb.avatar_url : site.logo}"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+
+      <div class="sideProfile__name"
+           th:text="${(sb != null and sb.display_name != null and sb.display_name != '') ? sb.display_name : site.title}">
+        Name
+      </div>
+
+      <div class="sideProfile__bio"
+           th:if="${(sb != null and sb.bio != null and sb.bio != '') or (site.subtitle != null and site.subtitle != '')}"
+           th:text="${(sb != null and sb.bio != null and sb.bio != '') ? sb.bio : site.subtitle}">
+        Bio
+      </div>
+
+      <div class="sideProfile__actions">
+        <a class="iconBtn"
+           th:if="${sb != null and sb.github_url != null and sb.github_url != ''}"
+           th:href="${sb.github_url}"
+           target="_blank"
+           rel="noopener"
+           aria-label="GitHub">
+          <span aria-hidden="true">⌁</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sideCard" th:if="${sb == null or sb.show_categories == null or sb.show_categories}">
+    <div class="sideCard__hd">
+      <span class="sideCard__bar" aria-hidden="true"></span>
+      <h3 class="sideCard__title">分類目錄</h3>
+    </div>
+
+    <div class="sideList" th:with="cats=${categoryFinder.listAll()}">
+      <a class="sideList__row" th:each="c : ${cats}" th:href="${c.status.permalink}">
+        <span class="sideList__name" th:text="${c.spec.displayName}">分類</span>
+        <span class="sideList__count" th:text="${c.status.postCount} ?: ${c.postCount} ?: 0">0</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="sideCard" th:if="${sb == null or sb.show_tags == null or sb.show_tags}">
+    <div class="sideCard__hd">
+      <span class="sideCard__bar" aria-hidden="true"></span>
+      <h3 class="sideCard__title">標籤</h3>
+    </div>
+
+    <div class="sideTags" th:with="allTags=${tagFinder.listAll()}">
+      <a class="chip" th:each="t : ${allTags}" th:href="${t.status.permalink}">
+        <span class="chip__name" th:text="${t.spec.displayName}">Tag</span>
+      </a>
+    </div>
+  </section>
+
+</th:block>

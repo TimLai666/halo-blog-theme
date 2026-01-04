@@ -1,16 +1,17 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
   <th:insert th:replace="~{modules/head :: headFragment}"></th:insert>
-
-  <body class="theme theme--archives" th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
-                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')" th:attr="data-accent=${theme.config.style.accent},
+  <body class="theme theme--archives"
+        th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
+                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')"
+        th:attr="data-accent=${theme.config.style.accent},
                  data-reduce-motion=${theme.config.style.reduce_motion}">
 
     <th:insert th:replace="~{modules/header :: headerFragment}"></th:insert>
 
     <main class="archives">
       <header class="archives__hero">
-        <h1 class="archives__title">所有文章</h1>
-        <p class="archives__sub">匯集所有筆跡，任你逐頁尋光。</p>
+        <h1 class="archives__title">歸檔</h1>
+        <p class="archives__sub">像時間軸一樣把文章排好：沒有干擾，只剩內容。</p>
       </header>
 
       <section class="archives__list">
@@ -23,8 +24,7 @@
                 <li class="archives__post" th:each="p : ${m.posts}">
                   <a class="archives__postLink" th:href="@{${p.status.permalink}}">
                     <span class="archives__postTitle" th:text="${p.spec.title}">Title</span>
-                    <span class="archives__postMeta"
-                      th:text="${#temporals.format(p.spec.publishTime, 'MM-dd')}">01-01</span>
+                    <span class="archives__postMeta" th:text="${#temporals.format(p.spec.publishTime, 'MM-dd')}">01-01</span>
                   </a>
                 </li>
               </ul>

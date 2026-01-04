@@ -50,3 +50,34 @@ spec:
           name: show_reading_progress
           label: 顯示閱讀進度條
           value: true
+
+    - group: sidebar
+      label: 側欄
+      formSchema:
+        - $formkit: text
+          name: display_name
+          label: 側欄顯示名稱
+          value: ""
+          help: 留空則使用網站標題
+        - $formkit: textarea
+          name: bio
+          label: 側欄簡介
+          value: ""
+          help: 留空則使用網站副標
+        - $formkit: text
+          name: avatar_url
+          label: 側欄頭像網址
+          value: ""
+          help: 留空則使用網站 Logo
+        - $formkit: text
+          name: github_url
+          label: GitHub 連結
+          value: ""
+        - $formkit: switch
+          name: show_categories
+          label: 顯示分類
+          value: true
+        - $formkit: switch
+          name: show_tags
+          label: 顯示標籤
+          value: true

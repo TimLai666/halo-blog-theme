@@ -1,8 +1,9 @@
 <th:block xmlns:th="http://www.thymeleaf.org">
   <th:insert th:replace="~{modules/head :: headFragment}"></th:insert>
-
-  <body class="theme theme--home" th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
-                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')" th:attr="data-accent=${theme.config.style.accent},
+  <body class="theme theme--home"
+        th:classappend="${theme.config.style.color_scheme} == 'dark' ? ' theme--dark' :
+                        (${theme.config.style.color_scheme} == 'light' ? ' theme--light' : ' theme--system')"
+        th:attr="data-accent=${theme.config.style.accent},
                  data-density=${theme.config.layout.home_density},
                  data-reduce-motion=${theme.config.style.reduce_motion}">
 
@@ -14,47 +15,54 @@
           <h1 class="home__h1" th:text="${site.title}">Site</h1>
           <p class="home__lead" th:if="${site.subtitle}" th:text="${site.subtitle}">subtitle</p>
           <p class="home__meta">
-            <!-- <span class="pill">無封面也成立</span>
+            <span class="pill">無封面也成立</span>
             <span class="pill">文字為主</span>
-            <span class="pill">沉浸閱讀</span> -->
+            <span class="pill">沉浸閱讀</span>
           </p>
         </div>
       </section>
 
-      <section class="home__grid">
-        <article class="card" th:each="p, st : ${posts.items}">
-          <a class="card__link" th:href="${p.status.permalink}">
-            <div class="card__cap">
-              <div class="card__no" th:text="${#numbers.formatInteger(st.index + 1, 2)}">01</div>
-              <div class="card__capLine"></div>
-            </div>
-
-            <header class="card__hd">
-              <h2 class="card__title" th:text="${p.spec.title}">Title</h2>
-              <p class="card__excerpt" th:text="${p.status.excerpt}">Excerpt</p>
-            </header>
-
-            <footer class="card__ft">
-              <time class="card__time" th:text="${#temporals.format(p.spec.publishTime, 'yyyy-MM-dd')}"
-                th:if="${p.spec.publishTime}">2026-01-01</time>
-
-              <div class="card__tags" th:if="${p.tags}">
-                <span class="tag" th:each="t : ${p.tags}" th:text="${t.spec.displayName}">tag</span>
+      <section class="home__layout">
+        <section class="home__grid" aria-label="文章列表">
+          <article class="card" th:each="p, st : ${posts.items}">
+            <a class="card__link" th:href="${p.status.permalink}">
+              <div class="card__cap">
+                <div class="card__no" th:text="${#numbers.formatInteger(st.index + 1, 2)}">01</div>
+                <div class="card__capLine"></div>
               </div>
-            </footer>
-          </a>
 
-          <!-- Optional cover: only show if exists, but never required -->
-          <div class="card__cover" th:if="${p.spec.cover}">
-            <img th:src="${p.spec.cover}" alt="" loading="lazy" />
+              <header class="card__hd">
+                <h2 class="card__title" th:text="${p.spec.title}">Title</h2>
+                <p class="card__excerpt" th:text="${p.status.excerpt}">Excerpt</p>
+              </header>
+
+              <footer class="card__ft">
+                <time class="card__time"
+                      th:text="${#temporals.format(p.spec.publishTime, 'yyyy-MM-dd')}"
+                      th:if="${p.spec.publishTime}">2026-01-01</time>
+
+                <div class="card__tags" th:if="${p.tags}">
+                  <span class="tag" th:each="t : ${p.tags}" th:text="${t.spec.displayName}">tag</span>
+                </div>
+              </footer>
+            </a>
+
+            <!-- Optional cover: only show if exists, but never required -->
+            <div class="card__cover" th:if="${p.spec.cover}">
+              <img th:src="${p.spec.cover}" alt="" loading="lazy"/>
+            </div>
+          </article>
+
+          <div class="pager" th:if="${posts.hasPrevious() || posts.hasNext()}">
+            <a class="pager__btn" th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">← 上一頁</a>
+            <span class="pager__info" th:text="${posts.page} +' / '+ ${posts.totalPages}">1 / 1</span>
+            <a class="pager__btn" th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">下一頁 →</a>
           </div>
-        </article>
+        </section>
 
-        <div class="pager" th:if="${posts.hasPrevious() || posts.hasNext()}">
-          <a class="pager__btn" th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">← 上一頁</a>
-          <span class="pager__info" th:text="${posts.page} +' / '+ ${posts.totalPages}">1 / 1</span>
-          <a class="pager__btn" th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">下一頁 →</a>
-        </div>
+        <aside class="home__side" aria-label="側欄">
+          <th:insert th:replace="~{modules/sidebar :: sidebarFragment}"></th:insert>
+        </aside>
       </section>
     </main>
 

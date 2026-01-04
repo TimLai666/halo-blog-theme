@@ -8,9 +8,10 @@
     <main class="tax">
       <h1 class="tax__title">標籤</h1>
       <div class="tax__grid">
-        <a class="tax__chip" th:each="t : ${tags}" th:href="${t.status.permalink}">
+        <!-- Halo passes tags as a pageable object -->
+        <a class="tax__chip" th:each="t : ${tags.items}" th:href="${t.status.permalink}">
           <span class="tax__chipName" th:text="${t.spec.displayName}">tag</span>
-          <span class="tax__chipCount" th:text="${t.postCount}">0</span>
+          <span class="tax__chipCount" th:text="${t.status.postCount} ?: ${t.postCount} ?: 0">0</span>
         </a>
       </div>
       <div class="pager" th:if="${tags.hasPrevious() || tags.hasNext()}">
